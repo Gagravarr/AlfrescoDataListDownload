@@ -26,6 +26,8 @@ function main()
       canCreate = response.permissions.create;
    }
 
+   model.formats = ["xls","xlsx","csv"];
+
 	model.datalists = datalists;
    model.canCreate = canCreate;
 	model.site = site;
