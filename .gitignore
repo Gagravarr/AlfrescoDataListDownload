@@ -1,7 +1,8 @@
 *.class
+*.swp
 
 # Package Files #
-*.jar
+build
 *.war
 *.ear
 *.amp

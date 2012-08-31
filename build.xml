@@ -12,30 +12,44 @@
    <property name="amp.share.file" value="${amp.dir}/DataListDownloadShare.amp"/>
    <property name="amp.repo.file" value="${amp.dir}/DataListDownloadRepo.amp"/>
 
-  <target name="init">
-    <mkdir dir="${build.dir}" />
-    <mkdir dir="${build.dir}/classes" />
-    <mkdir dir="${build.dir}/test-classes" />
-    <mkdir dir="${amp.dir}" />
-  </target>
+   <path id="class.path">
+      <dirset dir="${build.dir}/classes"/>
+      <fileset dir="lib/" includes="*.jar"/>
+      <fileset dir="lib/deploy" includes="*.jar"/>
+      <fileset dir="lib/compile" includes="*.jar"/>
+   </path>
 
-  <target name="compile" depends="init">
-    <!-- TODO -->
-  </target>
+   <target name="clean">
+      <delete dir="${build.dir}" />
+   </target>
 
-  <target name="package-jar" depends="init,compile">
-    <!-- TODO -->
-  </target>
+   <target name="init">
+      <mkdir dir="${build.dir}" />
+      <mkdir dir="${build.dir}/classes" />
+      <mkdir dir="${build.dir}/test-classes" />
+      <mkdir dir="${amp.dir}" />
+   </target>
 
-  <target name="package-amps" depends="init,package-jar">
-    <!-- TODO -->
-  </target>
+   <target name="compile" depends="init">
+       <javac classpathref="class.path"  
+              srcdir="${project.dir}/src/main/java"  
+              destdir="${build.dir}/classes"   
+              target="1.6" source="1.6"/> 
+   </target>
 
-  <target name="dist" depends="package-amps">
-     <echo message="Packaging Completed" />
-     <echo message="You should now install the AMPs into Alfresco and Share" />
-     <echo message=""/>
-     <echo message="Share:     ${amp.share.file}"/>
-     <echo message="Alfresco:  ${amp.repo.file}"/>
-  </target>
+   <target name="package-jar" depends="init,compile">
+      <!-- TODO -->
+   </target>
+
+   <target name="package-amps" depends="init,package-jar">
+      <!-- TODO -->
+   </target>
+
+   <target name="dist" depends="package-amps">
+      <echo message="Packaging Completed" />
+      <echo message="You should now install the AMPs into Alfresco and Share" />
+      <echo message=""/>
+      <echo message="Share:     ${amp.share.file}"/>
+      <echo message="Alfresco:  ${amp.repo.file}"/>
+   </target>
 </project>
