@@ -1,6 +1,6 @@
 <webscript>
-	<shortname>Data Dashlets</shortname>
-	<description>Return the data from Datalist</description>
+	<shortname>DataList Export Dashlet</shortname>
+	<description>Exports the contents of DataLists, in a variety of Spreadsheet formats</description>
 	<family>site-dashlet</family>
 	<url>/com/quanticate/datalists</url>
 	<authentication>user</authentication>

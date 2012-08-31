@@ -8,6 +8,8 @@
    <property name="config.share.dir" value="${config.dir}/share"/>
    <property name="config.repo.dir" value="${config.dir}/repository"/>
 
+   <property name="jar.file" value="${build.dir}/lib/DataListDownload.jar" />
+
    <property name="amp.dir" value="${build.dir}/dist" />
    <property name="amp.share.file" value="${amp.dir}/DataListDownloadShare.amp"/>
    <property name="amp.repo.file" value="${amp.dir}/DataListDownloadRepo.amp"/>
@@ -25,6 +27,7 @@
 
    <target name="init">
       <mkdir dir="${build.dir}" />
+      <mkdir dir="${build.dir}/lib" />
       <mkdir dir="${build.dir}/classes" />
       <mkdir dir="${build.dir}/test-classes" />
       <mkdir dir="${amp.dir}" />
@@ -38,11 +41,33 @@
    </target>
 
    <target name="package-jar" depends="init,compile">
-      <!-- TODO -->
+      <jar destfile="${jar.file}" >
+         <fileset dir="${build.dir}/classes" 
+               excludes="**/custom*,**/*Test*" includes="**/*.class" />
+      </jar>
+
+      <copy todir="${project.dir}/build/lib">
+         <fileset dir="${project.dir}/lib/deploy" includes="*.jar" />
+      </copy>
    </target>
 
    <target name="package-amps" depends="init,package-jar">
-      <!-- TODO -->
+       <zip destfile="${amp.repo.file}" >
+          <fileset dir="${project.dir}/build" includes="lib/*.jar" />
+          <fileset dir="${project.dir}/config/repository/alfresco/module/com.quanticate.opensource.datalistdownload" 
+                   includes="module.properties" />
+          <zipfileset dir="${project.dir}/config/repository" 
+                   includes="**" excludes="**/module.properties" 
+                   prefix="config" />
+       </zip>
+
+       <zip destfile="${amp.share.file}" >
+          <fileset dir="${project.dir}/config/share/alfresco/module/com.quanticate.opensource.datalistdownload" 
+                   includes="module.properties" />
+          <zipfileset dir="${project.dir}/config/share" 
+                   includes="**" excludes="**/module.properties" 
+                   prefix="config" />
+       </zip>
    </target>
 
    <target name="dist" depends="package-amps">
