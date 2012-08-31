@@ -71,8 +71,10 @@
       <#else>
          <p>There are no Data Lists defined in your site, so nothing can
            be exported.</p>
-         <p>Please visit the <a href="${url.context}/page/site/${site}/data-lists">Data Lists</a>
-            section of your site to add new Data Lists.</p>
+         <#if site??>
+           <p>Please visit the <a href="${url.context}/page/site/${site}/data-lists">Data Lists</a>
+              section of your site to add new Data Lists.</p>
+         </#if>
       </#if>
 
       </div>
