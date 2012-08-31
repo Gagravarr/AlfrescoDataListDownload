@@ -99,7 +99,14 @@ if (typeof Quanticate == "undefined" || !Quanticate)
               this.widgets.formats.set("label", menuItem.cfg.getProperty("text"));
               this.widgets.formats.value = menuItem.value;
 
-              alert("Now " + this.widgets.formats.value);
+              // Find the links, and re-write them
+              var links = Selector.query("a.dldownload-"+this.id);
+              for (var link in links)
+              {
+                var href = link.href;
+                var formatAt = href.indexOf("format=");
+                link.href = href.substring(0, formatAt) + "format=" + menuItem.value;
+              }
            }
         },
     });
