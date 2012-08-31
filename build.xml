@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<project name="Alfresco DataList Download">
+<project name="Alfresco DataList Download" default="dist">
    <property name="project.dir" value="."/>
    <property name="build.dir" value="${project.dir}/build"/>
    <property name="config.dir" value="${project.dir}/config"/>
@@ -17,5 +17,25 @@
     <mkdir dir="${build.dir}/classes" />
     <mkdir dir="${build.dir}/test-classes" />
     <mkdir dir="${amp.dir}" />
+  </target>
+
+  <target name="compile" depends="init">
+    <!-- TODO -->
+  </target>
+
+  <target name="package-jar" depends="init,compile">
+    <!-- TODO -->
+  </target>
+
+  <target name="package-amps" depends="init,package-jar">
+    <!-- TODO -->
+  </target>
+
+  <target name="dist" depends="package-amps">
+     <echo message="Packaging Completed" />
+     <echo message="You should now install the AMPs into Alfresco and Share" />
+     <echo message=""/>
+     <echo message="Share:     ${amp.share.file}"/>
+     <echo message="Alfresco:  ${amp.repo.file}"/>
   </target>
 </project>
