@@ -12,7 +12,7 @@ defined in your site, then trigger an export of the selected DataList
 as one of:
  * Excel (xls)
  * Excel (xlsx)
- * CSV (csv)  **coming soon**
+ * CSV (csv)
  * OpenDocument Format (odf) **comming soon**
 
 The Repository AMP provides the support for exporting DataLists as
@@ -32,7 +32,10 @@ wars as normal.
 Installation
 ============
 Once you have built both the AMPs, install them to the respective WARs
-using the MMT jar, and restart Tomcat.
+using the MMT jar, and restart Tomcat. You'll do something like
+
+   java -jar alfresco-mmt.jar install DataListDownloadRepo.amp alfresco.war
+   java -jar alfresco-mmt.jar install DataListDownloadShare.amp share.war
 
 The export is handled by a site dashlet. On the site where you would like
 to export Data Lists, Customise the Dashboard and add the **DataList Export**
