@@ -1,5 +1,5 @@
 <webscript>
-	<shortname>DataList Export Dashlet</shortname>
+	<shortname>DataList Export</shortname>
 	<description>Exports the contents of DataLists, in a variety of Spreadsheet formats</description>
 	<family>site-dashlet</family>
 	<url>/com/quanticate/datalists</url>

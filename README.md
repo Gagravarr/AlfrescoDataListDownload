@@ -35,8 +35,8 @@ Once you have built both the AMPs, install them to the respective WARs
 using the MMT jar, and restart Tomcat.
 
 The export is handled by a site dashlet. On the site where you would like
-to export Data Lists, customise the site and add the **DataList Export
-Dashlet** to your site. No configuration is required, just pick the 
+to export Data Lists, Customise the Dashboard and add the **DataList Export**
+Dashlet to your site. No configuration is required, just pick the 
 DataList you'd like to export and the format to export in!
 
 License
