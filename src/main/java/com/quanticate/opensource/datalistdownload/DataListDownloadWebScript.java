@@ -45,6 +45,7 @@ import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.namespace.InvalidQNameException;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.ISO8601DateFormat;
 import org.alfresco.util.Pair;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.logging.Log;
@@ -273,7 +274,66 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
     @Override
     protected void populateBody(Object resource, CSVPrinter csv,
           List<QName> properties) throws IOException {
-       throw new WebScriptException(Status.STATUS_BAD_REQUEST, "CSV not currently supported");
+       NodeRef list = (NodeRef)resource;
+       List<NodeRef> items = getItems(list);
+       
+       for(NodeRef item : items)
+       {
+          for(QName prop : properties)
+          {
+             Pair<Object,String> valAndLink = identifyValueAndLink(item, prop);
+             
+             if (valAndLink == null)
+             {
+                // This property isn't set
+                csv.print("");
+             }
+             else
+             {
+                Object val = valAndLink.getFirst();
+                
+                // Multi-line property?
+                if (val instanceof String[])
+                {
+                   String[] lines = (String[])val;
+                   StringBuffer text = new StringBuffer();
+   
+                   for (String line : lines)
+                   {
+                      if(text.length() > 0) {
+                         text.append('\n');
+                      }
+                      text.append(line);
+                   }
+   
+                   csv.print(text.toString());
+                }
+                
+                // Regular properties
+                else if(val instanceof String)
+                {
+                   csv.print((String)val);
+                }
+                else if(val instanceof Date)
+                {
+                   csv.print( ISO8601DateFormat.format((Date)val) );
+                }
+                else if(val instanceof Integer || val instanceof Long)
+                {
+                   csv.print( val.toString() );
+                }
+                else if(val instanceof Float || val instanceof Double)
+                {
+                   csv.print( val.toString() );
+                }
+                else
+                {
+                   System.err.println("TODO: Handle CSV output of " + val.getClass().getName() + " - " + val);
+                }
+             }
+          }
+          csv.println();
+       }
     }
 
     @Override
@@ -305,65 +365,42 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
           {
              Cell c = r.createCell(colNum);
 
-             Serializable val = nodeService.getProperty(item, prop);
-             if(val == null)
+             Pair<Object,String> valAndLink = identifyValueAndLink(item, prop);
+             
+             if (valAndLink == null)
              {
-                // Is it an association, or just missing?
-                List<AssociationRef> assocs =  nodeService.getTargetAssocs(item, prop);
-                if(assocs.size() > 0)
+                // This property isn't set
+                c.setCellType(Cell.CELL_TYPE_BLANK);
+             }
+             else
+             {
+                Object val = valAndLink.getFirst();
+                
+                // Multi-line property?
+                if (val instanceof String[])
                 {
+                   String[] lines = (String[])val;
                    StringBuffer text = new StringBuffer();
-                   int lines = 1;
 
-                   for(AssociationRef ref : assocs)
+                   for (String line : lines)
                    {
-                      NodeRef child = ref.getTargetRef();
-                      QName type = nodeService.getType(child);
-                      if(ContentModel.TYPE_PERSON.equals(type))
-                      {
-                         if(text.length() > 0) {
-                            text.append('\n');
-                            lines++;
-                         }
-                         text.append(nodeService.getProperty(
-                               child, ContentModel.PROP_USERNAME
-                         ));
+                      if(text.length() > 0) {
+                         text.append('\n');
                       }
-                      else if(ContentModel.TYPE_CONTENT.equals(type))
-                      {
-                         // TODO Link to the content
-                         if(text.length() > 0) {
-                            text.append('\n');
-                            lines++;
-                         }
-                         text.append(nodeService.getProperty(
-                               child, ContentModel.PROP_TITLE
-                         ));
-                      }
-                      else
-                      {
-                         System.err.println("TODO: handle " + type + " for " + child);
-                      }
+                      text.append(line);
                    }
 
                    String v = text.toString();
                    c.setCellValue( v );
-                   if(lines > 1) 
+                   if(lines.length > 1) 
                    {
                       c.setCellStyle(styleNewLines);
-                      r.setHeightInPoints( lines*sheet.getDefaultRowHeightInPoints() );
+                      r.setHeightInPoints( lines.length*sheet.getDefaultRowHeightInPoints() );
                    }
                 }
-                else
-                {
-                   // This property isn't set
-                   c.setCellType(Cell.CELL_TYPE_BLANK);
-                }
-             }
-             else
-             {
-                // Regular property, set
-                if(val instanceof String)
+                
+                // Regular properties
+                else if(val instanceof String)
                 {
                    c.setCellValue((String)val);
                 }
@@ -391,7 +428,7 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
                 else
                 {
                    // TODO
-                   System.err.println("TODO: handle " + val.getClass().getName() + " - " + val);
+                   System.err.println("TODO: Handle Excel output of " + val.getClass().getName() + " - " + val);
                 }
              }
 
@@ -407,6 +444,56 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
        {
           sheet.autoSizeColumn(colNum);
           colNum++;
+       }
+    }
+
+    protected Pair<Object,String> identifyValueAndLink(NodeRef item, QName prop)
+    {
+       Serializable val = nodeService.getProperty(item, prop);
+       if(val == null)
+       {
+          // Is it an association, or just missing?
+          List<AssociationRef> assocs =  nodeService.getTargetAssocs(item, prop);
+          if(assocs.size() > 0)
+          {
+             ArrayList<String> text = new ArrayList<String>();
+
+             for(AssociationRef ref : assocs)
+             {
+                NodeRef child = ref.getTargetRef();
+                QName type = nodeService.getType(child);
+                if(ContentModel.TYPE_PERSON.equals(type))
+                {
+                   text.add((String)nodeService.getProperty(
+                         child, ContentModel.PROP_USERNAME
+                   ));
+                }
+                else if(ContentModel.TYPE_CONTENT.equals(type))
+                {
+                   // TODO Link to the content
+                   text.add((String)nodeService.getProperty(
+                         child, ContentModel.PROP_TITLE
+                   ));
+                }
+                else
+                {
+                   System.err.println("TODO: handle " + type + " for " + child);
+                }
+             }
+
+             String[] lines = text.toArray(new String[text.size()]);
+             return new Pair<Object,String>(lines, null);
+          }
+          else
+          {
+             // This property isn't set
+             return null;
+          }
+       }
+       else
+       {
+          // Regular property
+          return new Pair<Object,String>(val, null);
        }
     }
 }
