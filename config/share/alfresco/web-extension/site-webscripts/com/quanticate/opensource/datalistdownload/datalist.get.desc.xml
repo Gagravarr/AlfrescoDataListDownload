@@ -1,0 +1,8 @@
+<webscript>
+	<shortname>Data Dashlets</shortname>
+	<description>Return the data from Datalist</description>
+	<family>site-dashlet</family>
+	<url>/com/quanticate/datalists</url>
+	<authentication>user</authentication>
+	<format default="html">any</format>
+</webscript>
