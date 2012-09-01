@@ -30,7 +30,7 @@
 
    <#if datalists?has_content>
      <div class="toolbar flat-button">
-        <div class="hidden">
+        <div>
           <span class="align-left yui-button yui-menu-button" id="${id}-formats">
              <span class="first-child">
                 <button type="button" tabindex="0"></button>
