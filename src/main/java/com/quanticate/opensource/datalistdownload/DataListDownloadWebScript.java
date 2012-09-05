@@ -81,7 +81,6 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
     
     private NodeService nodeService;
     private SiteService siteService;
-    private DictionaryService dictionaryService;
     private NamespaceService namespaceService;
     private Map<QName,List<QName>> modelOrder;
     private Map<String,String> rawModelOrder;
@@ -105,14 +104,6 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
     public void setSiteService(SiteService siteService)
     {
         this.siteService = siteService; 
-    }
-    
-    /**
-     * @param dictionaryService
-     */
-    public void setDictionaryService(DictionaryService dictionaryService)
-    {
-        this.dictionaryService = dictionaryService; 
     }
     
     /**
@@ -235,17 +226,38 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
        else
        {
           // We'll have to try to guess it for them
-          // For now, just use DataList properties for the type
+          // For now, use any DataList properties for the type, 
+          //  along with any non-standard ones
           TypeDefinition typeDef = dictionaryService.getType(type);
           Map<QName, PropertyDefinition> allProps = typeDef.getProperties();
           props = new ArrayList<QName>();
 
-          for(QName prop : allProps.keySet())
+          boolean hasCustom = false;
+          for (QName prop : allProps.keySet())
           {
-             if(NamespaceService.DATALIST_MODEL_1_0_URI.equals(prop.getNamespaceURI()))
+             String propNS = prop.getNamespaceURI();
+             if (NamespaceService.DATALIST_MODEL_1_0_URI.equals(propNS))
              {
                 props.add(prop);
              }
+             else if (NamespaceService.ALFRESCO_URI.equals(propNS) ||
+                      NamespaceService.CONTENT_MODEL_1_0_URI.equals(propNS) ||
+                      NamespaceService.SYSTEM_MODEL_1_0_URI.equals(propNS))
+             {
+                // Built in property, skip
+             }
+             else
+             {
+                // It's probably a custom one, include it
+                props.add(prop);
+                hasCustom = true;
+             }
+          }
+          
+          if (hasCustom)
+          {
+             logger.warn("No export definition found for type " + type + 
+                   " - for best results you should define one to give order and include/exclude");
           }
        }
 
@@ -280,7 +292,8 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
           while (check != null)
           {
              check = dictionaryService.getType(check).getParentName();
-             if (check.getNamespaceURI().equals(NamespaceService.DATALIST_MODEL_PREFIX))
+             if (check != null && check.getNamespaceURI().equals(
+                   NamespaceService.DATALIST_MODEL_1_0_URI))
              {
                 // It's a custom datalist, that's OK
                 return type;
