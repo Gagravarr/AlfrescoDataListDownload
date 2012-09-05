@@ -6,5 +6,6 @@
     <bean id="webscript.com.quanticate.opensource.datalistdownload.list.get"
           class="com.quanticate.opensource.datalistdownload.DataListDownloadWebScript"
           parent="webscript.org.alfresco.slingshot.datalists.list.get">
+       <property name="dictionaryService" ref="DictionaryService" />
     </bean>
 </beans>

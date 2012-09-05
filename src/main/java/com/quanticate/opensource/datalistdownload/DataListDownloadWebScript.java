@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 import org.alfresco.model.ContentModel;
 import org.alfresco.model.DataListModel;
 import org.alfresco.repo.web.scripts.DeclarativeSpreadsheetWebScript;
+import org.alfresco.service.cmr.dictionary.DictionaryService;
 import org.alfresco.service.cmr.dictionary.PropertyDefinition;
 import org.alfresco.service.cmr.dictionary.TypeDefinition;
 import org.alfresco.service.cmr.repository.AssociationRef;
@@ -80,6 +81,7 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
     
     private NodeService nodeService;
     private SiteService siteService;
+    private DictionaryService dictionaryService;
     private NamespaceService namespaceService;
     private Map<QName,List<QName>> modelOrder;
     private Map<String,String> rawModelOrder;
@@ -98,11 +100,19 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
     }
 
     /**
-     * @param nodeService
+     * @param siteService
      */
     public void setSiteService(SiteService siteService)
     {
         this.siteService = siteService; 
+    }
+    
+    /**
+     * @param dictionaryService
+     */
+    public void setDictionaryService(DictionaryService dictionaryService)
+    {
+        this.dictionaryService = dictionaryService; 
     }
     
     /**
@@ -248,15 +258,38 @@ public class DataListDownloadWebScript extends DeclarativeSpreadsheetWebScript
        return properties;
     }
 
+    /**
+     * Verify it's a DataList, and build the type
+     * @param list
+     * @return
+     */
     private QName buildType(NodeRef list)
     {
        String typeS = (String)nodeService.getProperty(list, DATA_LIST_ITEM_TYPE);
-       if(! typeS.startsWith(NamespaceService.DATALIST_MODEL_PREFIX + ":"))
+       if(typeS.startsWith(NamespaceService.DATALIST_MODEL_PREFIX + ":"))
        {
-          throw new WebScriptException(Status.STATUS_NOT_IMPLEMENTED, "Unexpected list type " + typeS);
+          // Regular Alfresco DataList
+          QName type = QName.createQName(NamespaceService.DATALIST_MODEL_1_0_URI, typeS.substring(typeS.indexOf(':')+1));
+          return type;
        }
-       QName type = QName.createQName(NamespaceService.DATALIST_MODEL_1_0_URI, typeS.substring(typeS.indexOf(':')+1));
-       return type;
+       else
+       {
+          // Check if it's a custom one
+          QName type = QName.createQName(typeS, namespaceService);
+          QName check = type;
+          while (check != null)
+          {
+             check = dictionaryService.getType(check).getParentName();
+             if (check.getNamespaceURI().equals(NamespaceService.DATALIST_MODEL_PREFIX))
+             {
+                // It's a custom datalist, that's OK
+                return type;
+             }
+          }
+       }
+
+       // It's neither a built-in nor a customised datalist
+       throw new WebScriptException(Status.STATUS_NOT_IMPLEMENTED, "Unexpected list type " + typeS);
     }
 
     private List<NodeRef> getItems(NodeRef list)
