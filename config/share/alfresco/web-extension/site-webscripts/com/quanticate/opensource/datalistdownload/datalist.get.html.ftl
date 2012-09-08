@@ -1,6 +1,22 @@
 <#assign id = args.htmlid>
 <#assign jsid = args.htmlid?js_string>
 
+<script type="text/javascript"  src="/share/res/jquery/jquery-1.5.2-min.js"></script>
+<script type="text/javascript">
+function UpdateDownloadLink()
+{
+	// usw jquery selector
+	var collection = $(".dldownload-${id}");
+	collection.each(function() {
+		var currenthref= $(this).attr("href");
+		var substr = currenthref.split('?format=');
+		var baseurl = substr[0];
+		var newurl  = substr[0]+"?format="+$('#${id}-formats-menu').val();				
+		$(this).attr("href", newurl);
+	});
+}
+</script>
+
 <script type="text/javascript">//<![CDATA[
 (function()
 {
@@ -36,7 +52,7 @@
                 <button type="button" tabindex="0"></button>
              </span>
           </span>
-          <select id="${id}-formats-menu">
+          <select id="${id}-formats-menu" onchange="UpdateDownloadLink()">
           <#list formats as format>
              <option value="${format}">${msg("format." + format)}</option>
           </#list>
