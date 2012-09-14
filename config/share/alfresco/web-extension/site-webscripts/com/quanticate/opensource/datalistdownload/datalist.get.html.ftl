@@ -1,20 +1,22 @@
 <#assign id = args.htmlid>
 <#assign jsid = args.htmlid?js_string>
 
-<script type="text/javascript"  src="/share/res/jquery/jquery-1.5.2-min.js"></script>
+
+<script type="text/javascript"  src="/share/res/js/yui-common.js"></script>
 <script type="text/javascript">
-function UpdateDownloadLink()
+var UpdateDownloadLink = function(e)
 {
-	// usw jquery selector
-	var collection = $(".dldownload-${id}");
-	collection.each(function() {
-		var currenthref= $(this).attr("href");
+	var elements = YAHOO.util.Dom.getElementsByClassName("dldownload-${id}");
+	for(var i=0;i<elements.length;i++)
+	{
+		var el = new YAHOO.util.Element(elements[i]);
+		var currenthref = el.get("href");
 		var substr = currenthref.split('?format=');
-		var baseurl = substr[0];
-		var newurl  = substr[0]+"?format="+$('#${id}-formats-menu').val();				
-		$(this).attr("href", newurl);
-	});
-}
+		var newurl = substr[0]+"?format="+YAHOO.util.Event.getTarget(e).value;		
+		YAHOO.util.Dom.setAttribute(el,"href",newurl);					
+	}
+};
+YAHOO.util.Event.on("${id}-formats-menu", 'change', UpdateDownloadLink);
 </script>
 
 <script type="text/javascript">//<![CDATA[
@@ -52,7 +54,7 @@ function UpdateDownloadLink()
                 <button type="button" tabindex="0"></button>
              </span>
           </span>
-          <select id="${id}-formats-menu" onchange="UpdateDownloadLink()">
+          <select id="${id}-formats-menu">
           <#list formats as format>
              <option value="${format}">${msg("format." + format)}</option>
           </#list>
