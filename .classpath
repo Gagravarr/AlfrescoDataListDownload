@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="output" path="build/eclipse-classes"/>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="lib" path="lib/compile/Alfresco-Core-4.1.0-SNAPSHOT-20120827.jar"/>
 	<classpathentry kind="lib" path="lib/compile/Alfresco-DataModel-Part-4.1.0-SNAPSHOT-20120827.jar"/>
@@ -14,4 +13,7 @@
 	<classpathentry kind="lib" path="lib/compile/spring-webscripts-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/deploy/Alfresco-Compat-40_to_41-4.1.0-SNAPSHOT-20120827.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/deploy/odfdom-java-0.8.9-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/deploy/simple-odf-0.8-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="build/eclipse-classes"/>
 </classpath>
