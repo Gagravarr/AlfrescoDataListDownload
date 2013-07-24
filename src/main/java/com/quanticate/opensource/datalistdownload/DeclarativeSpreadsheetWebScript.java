@@ -47,6 +47,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.odftoolkit.simple.Document;
+import org.odftoolkit.simple.SpreadsheetDocument;
+import org.odftoolkit.simple.table.Table;
 import org.springframework.extensions.webscripts.DeclarativeWebScript;
 import org.springframework.extensions.webscripts.Status;
 import org.springframework.extensions.webscripts.WebScriptException;
@@ -232,6 +235,31 @@ public abstract class DeclarativeSpreadsheetWebScript extends DeclarativeWebScri
             
             model.put(MODEL_CSV, sw.toString());
         }
+        else if("odf".equals(format) || "ods".equals(format))
+        {
+          try
+          {
+            SpreadsheetDocument odf = SpreadsheetDocument.newSpreadsheetDocument();
+
+            // Add the header row
+            Table sheet = odf.appendSheet("Export");
+            org.odftoolkit.simple.table.Row hr = sheet.appendRow();
+
+            // TODO
+
+            // Have the contents populated
+            // TODO
+
+            // Save it for the template
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            odf.save(baos);
+            model.put(MODEL_ODF, baos.toByteArray());
+          }
+          catch (Exception e)
+          {
+             throw new WebScriptException("Error creating ODF file", e);
+          }
+        }
         else
         {
             Workbook wb;
@@ -363,21 +391,22 @@ public abstract class DeclarativeSpreadsheetWebScript extends DeclarativeWebScri
             }
             else
             {
+                byte[] spreadsheet;
+
                 // Set the mimetype, as we've reset
-                if("odf".equals(format) || "ods".equals(format))
-                {
+                if("odf".equals(format) || "ods".equals(format)) {
                    res.setContentType(MimetypeMap.MIMETYPE_OPENDOCUMENT_SPREADSHEET);
-                }
-                else if("xlsx".equals(format))
-                {
+                   spreadsheet = (byte[])model.get(MODEL_ODF);
+                } else if("xlsx".equals(format)) {
                     res.setContentType(MimetypeMap.MIMETYPE_OPENXML_SPREADSHEET);
+                    spreadsheet = (byte[])model.get(MODEL_EXCEL);
                 } else {
                     res.setContentType(MimetypeMap.MIMETYPE_EXCEL);
+                    spreadsheet = (byte[])model.get(MODEL_EXCEL);
                 }
                 
-                // Send the raw excel bytes
-                byte[] excel = (byte[])model.get(MODEL_EXCEL);
-                res.getOutputStream().write(excel);
+                // Send the raw excel/odf bytes
+                res.getOutputStream().write(spreadsheet);
             }
         }
     }
