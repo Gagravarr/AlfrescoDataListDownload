@@ -22,8 +22,11 @@ features and formats.
 
 Building
 ========
-This has been tested against Alfresco Enterprise 4.0.2, and Alfresco 
-Enterprise 4.1.0. It ought to work fine on Community 4.x too
+The current version works with Alfresco Enterprise 4.1.4 and newer,
+and should work fine on Community 4.2.x. Due to a breaking change in
+the DataModel API in late 2012, earlier versions of Alfresco are
+no longer supported. For a version to work with those older Alfresco's,
+use a version of this library from early 2013 instead.
 
 To build, simply run "ant", and the two AMPs will be produced in
 the /build/dist/ directory. Install them to Share and the Alfresco Repository
