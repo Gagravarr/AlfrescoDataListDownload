@@ -13,20 +13,27 @@ as one of:
  * Excel (xls)
  * Excel (xlsx)
  * CSV (csv)
- * OpenDocument Format (odf) **comming soon**
+
+There is partial, but incomplete support for:
+ * OpenDocument Format (odf)
 
 The Repository AMP provides the support for exporting DataLists as
 Spreadsheets. It builds upon the code in Alfresco, fixing various bugs
 present in the webscripts there, and extending them to add additional
-features and formats.
+features and formats. (Attempts to get the fixes upstream into Alfresco
+have sadly not worked so far...)
 
 Building
 ========
 The current version works with Alfresco Enterprise 4.1.4 and newer,
-and should work fine on Community 4.2.x. Due to a breaking change in
-the DataModel API in late 2012, earlier versions of Alfresco are
-no longer supported. For a version to work with those older Alfresco's,
-use a version of this library from early 2013 instead.
+Alfresco Community and Enterprise 4.2.x, and Alfresco Community and
+Enterprise/One 5.0.x. It ought to be fine for 5.1 and newer too, but
+that hasn't been tested.
+
+Note that due to a breaking change in the DataModel API in late 2012, 
+earlier versions of Alfresco are no longer supported. For a version 
+to work with those older Alfresco's, use a version of this library from 
+early 2013 instead.
 
 To build, simply run "ant", and the two AMPs will be produced in
 the /build/dist/ directory. Install them to Share and the Alfresco Repository
@@ -44,6 +51,9 @@ The export is handled by a site dashlet. On the site where you would like
 to export Data Lists, Customise the Dashboard and add the **DataList Export**
 Dashlet to your site. No configuration is required, just pick the 
 DataList you'd like to export and the format to export in!
+
+(Adding a "Download" option to the datalist actions menu section, next to 
+"New Item" and "Selected Items" is a TODO)
 
 License
 =======
