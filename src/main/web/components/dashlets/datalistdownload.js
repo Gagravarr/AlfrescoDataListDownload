@@ -56,10 +56,6 @@
             this.widgets.formats.set("label", this.msg("format.xls"));
             this.widgets.formats.value = "xls";
 
-// TODO Why doesn't the on-click stuff work?
-// This will show the toolbar, with the right options in it, but clicking
-//  the option doesn't trigger the update...
-
             // Display the toolbar now that we have selected the filter
             Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
         },
@@ -82,11 +78,13 @@
 
               // Find the links, and re-write them
               var links = Selector.query("a.dldownload-"+this.id);
-              for (var link in links)
+              for (var i=0; i<links.length; i++)
               {
-                var href = link.href;
-                var formatAt = href.indexOf("format=");
-                link.href = href.substring(0, formatAt) + "format=" + menuItem.value;
+                 var link = links[i];
+                 var href = link.href;
+                 var formatAt = href.indexOf("format=");
+                 var nhref = href.substring(0, formatAt) + "format=" + menuItem.value;
+                 link.href = nhref;
               }
            }
         }
