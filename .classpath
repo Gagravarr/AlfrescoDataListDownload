@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="lib" path="lib/compile/Alfresco-Core-4.1.0-SNAPSHOT-20120827.jar"/>
-	<classpathentry kind="lib" path="lib/compile/Alfresco-DataModel-Part-4.1.0-SNAPSHOT-20120827.jar"/>
-	<classpathentry kind="lib" path="lib/compile/Alfresco-RemoteAPI-Part-4.1.0-SNAPSHOT-20120827.jar"/>
-	<classpathentry kind="lib" path="lib/compile/Alfresco-Repository-Part-4.1.0-SNAPSHOT-20120827.jar"/>
 	<classpathentry kind="lib" path="lib/compile/ApachePOI-SpreadsheetInterfaces-3.9-beta1-20120831.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-csv-20110211.jar"/>
 	<classpathentry kind="lib" path="lib/compile/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/compile/org.springframework.beans-3.0.5.RELEASE.jar"/>
 	<classpathentry kind="lib" path="lib/compile/spring-surf-core-1.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/compile/spring-webscripts-1.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/deploy/Alfresco-Compat-40_to_41-4.1.0-SNAPSHOT-20120827.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/deploy/odfdom-java-0.8.9-incubating-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/deploy/simple-odf-0.8-incubating-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/compile/Alfresco-Core-4.1.4-20130327.jar"/>
+	<classpathentry kind="lib" path="lib/compile/Alfresco-DataModel-Part-4.1.4-20130327.jar"/>
+	<classpathentry kind="lib" path="lib/compile/Alfresco-RemoteAPI-Part-4.1.4-20130327.jar"/>
+	<classpathentry kind="lib" path="lib/compile/Alfresco-Repository-Part-4.1.4-20130327.jar"/>
 	<classpathentry kind="output" path="build/eclipse-classes"/>
 </classpath>
