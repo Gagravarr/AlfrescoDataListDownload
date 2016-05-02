@@ -2,21 +2,14 @@
 
 <!-- Data List Export --> 
 <script type="text/javascript">
-if (typeof Quanticate == "undefined" || !Quanticate)
-{
-   var Quanticate = {};
-   Quanticate.dashlet = {};  
-}
-
-
 (function()
 {
    /**
     * YUI Library aliases
     */
    var Dom = YAHOO.util.Dom,
-      Event = YAHOO.util.Event,
-      Selector = YAHOO.util.Selector;
+       Event = YAHOO.util.Event,
+       Selector = YAHOO.util.Selector;
 
    /**
     * GetLatestDoc constructor.
@@ -25,25 +18,13 @@ if (typeof Quanticate == "undefined" || !Quanticate)
     * @return {politie.dashlet.GetLatestDoc} The new GetLatestDoc instance
     * @constructor
     */
-   Quanticate.dashlet.DataListExport = function DataListExport_constructor(htmlId)
+   Alfresco.dashlet.DataListExport = function DataListExport_constructor(htmlId)
    {
-      Quanticate.dashlet.DataListExport.superclass.constructor.call(this, "Quanticate.dashlet.DataListExport", htmlId);
+      return Alfresco.dashlet.DataListExport.superclass.constructor.call(this, "Alfresco.dashlet.DataListExport", htmlId, ["button","container","animation"]);
+   };
 
-      /**
-       * Register this component
-       */
-      Alfresco.util.ComponentManager.register(this);
-
-      /**
-       * Load YUI Components
-       */
-      Alfresco.util.YUILoaderHelper.require(["button", "container", "datasource", "datatable", "paginator", "json"], this.onComponentsLoaded, this);
-               
-        return this;
-    };
-
-    YAHOO.extend(Quanticate.dashlet.DataListExport, Alfresco.component.Base,
-    {
+   YAHOO.extend(Alfresco.dashlet.DataListExport, Alfresco.component.Base,
+   {
       /**
         * Object container for initialization options
         *
@@ -55,8 +36,8 @@ if (typeof Quanticate == "undefined" || !Quanticate)
           componentId: "",
           siteId: "",
           title: "Data List Export Dashlet",
-          filterPath: "",
           containerId: "documentLibrary",
+          formats: {}
        },
 
        widgets: {},
@@ -70,17 +51,23 @@ if (typeof Quanticate == "undefined" || !Quanticate)
         {
             var me = this;
 
-//          // Create dropdown filter widget
-//          this.widgets.formats = Alfresco.util.createYUIButton(this, "formats", this.onFormatChanged,
-//          {
-//             type: "menu",
-//             menu: "formats-menu",
-//             lazyloadmenu: false
-//          });
-//
-//          // Defaults
-//          this.widgets.formats.set("label", this.msg("filter.xls"));
-//          this.widgets.formats.value = "xls";
+            // Create dropdown filter widget
+            this.widgets.formats = Alfresco.util.createYUIButton(this, "formats", this.onFormatChanged,
+            {
+               type: "menu",
+               menu: "formats-menu",
+               lazyloadmenu: false
+            });
+  
+            // Defaults
+            this.widgets.formats.set("label", this.msg("format.xls"));
+            this.widgets.formats.value = "xls";
+
+// TODO Why doesn't the on-click stuff work?
+// This will show the toolbar, with the right options in it, but clicking
+//  the option doesn't trigger the update...
+            // Display the toolbar now that we have selected the filter
+            //Dom.removeClass(Selector.query(".toolbar div", this.id, true), "hidden");
         },
 
         /**

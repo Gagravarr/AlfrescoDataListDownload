@@ -22,7 +22,7 @@ YAHOO.util.Event.on("${id}-formats-menu", 'change', UpdateDownloadLink);
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-   var exporter = new Quanticate.dashlet.DataListExport("${jsid}").
+   var exporter = new Alfresco.dashlet.DataListExport("${jsid}").
                   setMessages(${messages});
 
    new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
@@ -48,7 +48,7 @@ YAHOO.util.Event.on("${id}-formats-menu", 'change', UpdateDownloadLink);
 
    <#if datalists?has_content>
      <div class="toolbar flat-button">
-        <div>
+        <div class="hidden">
           <span class="align-left yui-button yui-menu-button" id="${id}-formats">
              <span class="first-child">
                 <button type="button" tabindex="0"></button>
