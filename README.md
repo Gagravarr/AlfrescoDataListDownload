@@ -23,6 +23,12 @@ present in the webscripts there, and extending them to add additional
 features and formats. (Attempts to get the fixes upstream into Alfresco
 have sadly not worked so far...)
 
+Dashlet
+=======
+The dashlet will show all datalists in the site, and give options to
+download or view, along with changing the default. It looks something like:
+![Screenshot](/screenshots/dashlet.png?raw=true)
+
 Building
 ========
 The current version works with Alfresco Enterprise 4.1.4 and newer,
