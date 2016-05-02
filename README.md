@@ -28,12 +28,18 @@ Building
 The current version works with Alfresco Enterprise 4.1.4 and newer,
 Alfresco Community and Enterprise 4.2.x, and Alfresco Community and
 Enterprise/One 5.0.x. It ought to be fine for 5.1 and newer too, but
-that hasn't been tested.
+that hasn't been tested. 
 
 Note that due to a breaking change in the DataModel API in late 2012, 
 earlier versions of Alfresco are no longer supported. For a version 
 to work with those older Alfresco's, use a version of this library from 
 early 2013 instead.
+
+Note also that as this builds as an AMP, it won't necessarily apply
+easily to Alfresco 5.2 or Alfresco 6 builds, which are moving towards
+using Jars and Jar Modules. Some changes may be needed in late 2016 once
+the plan for thos is clear!
+
 
 To build, simply run "ant", and the two AMPs will be produced in
 the /build/dist/ directory. Install them to Share and the Alfresco Repository
