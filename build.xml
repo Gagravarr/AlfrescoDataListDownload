@@ -65,8 +65,12 @@
           <fileset dir="${project.dir}/config/share/alfresco/module/com.quanticate.opensource.datalistdownload" 
                    includes="module.properties" />
           <zipfileset dir="${project.dir}/config/share" 
-                   includes="**" excludes="**/module.properties" 
-                   prefix="config" />
+                   excludes="**/module.properties,file-mapping.properties" 
+                   includes="**" prefix="config" />
+          <zipfileset dir="${project.dir}/config/share/" 
+                   includes="file-mapping.properties" prefix="" />
+          <zipfileset dir="${project.dir}/src/main/web" 
+                   includes="**" prefix="web" />
        </zip>
    </target>
 

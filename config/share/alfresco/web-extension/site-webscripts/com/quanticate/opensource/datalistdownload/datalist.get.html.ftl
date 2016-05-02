@@ -1,32 +1,14 @@
 <#assign id = args.htmlid>
 <#assign jsid = args.htmlid?js_string>
-
-
-<script type="text/javascript"  src="/share/res/js/yui-common.js"></script>
-<script type="text/javascript">
-var UpdateDownloadLink = function(e)
-{
-	var elements = YAHOO.util.Dom.getElementsByClassName("dldownload-${id}");
-	for(var i=0;i<elements.length;i++)
-	{
-		var el = new YAHOO.util.Element(elements[i]);
-		var currenthref = el.get("href");
-		var substr = currenthref.split('?format=');
-		var newurl = substr[0]+"?format="+YAHOO.util.Event.getTarget(e).value;		
-		YAHOO.util.Dom.setAttribute(el,"href",newurl);					
-	}
-};
-YAHOO.util.Event.on("${id}-formats-menu", 'change', UpdateDownloadLink);
-</script>
-
 <script type="text/javascript">//<![CDATA[
 (function()
 {
-   var exporter = new Alfresco.dashlet.DataListExport("${jsid}").
-                  setMessages(${messages});
+   new Alfresco.dashlet.DataListExport("${jsid}").setOptions({
+      siteId: "${page.url.templateArgs.site!""}",
+   }).setMessages(${messages});
 
-   new Alfresco.widget.DashletResizer("${id}", "${instance.object.id}");
-   new Alfresco.widget.DashletTitleBarActions("${args.htmlid}").setOptions(
+   new Alfresco.widget.DashletResizer("${jsid}", "${instance.object.id}");
+   new Alfresco.widget.DashletTitleBarActions("${jsid}").setOptions(
    {
       actions:
       [
@@ -48,7 +30,7 @@ YAHOO.util.Event.on("${id}-formats-menu", 'change', UpdateDownloadLink);
 
    <#if datalists?has_content>
      <div class="toolbar flat-button">
-        <div class="hidden">
+        <div class="hidden" id="${id}-toolbar">
           <span class="align-left yui-button yui-menu-button" id="${id}-formats">
              <span class="first-child">
                 <button type="button" tabindex="0"></button>
